@@ -9,5 +9,9 @@ export default defineConfig([
       ui: "tdd",
       timeout: 20000,
     },
+    env:{
+      "DISPLAY": ":99"
+    },
+    
   },
 ]);
