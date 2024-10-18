@@ -22,6 +22,7 @@
     "lru-cache": "^11.0.1",
     "mocha": "^10.7.3",
     "npm-run-all": "^4.1.5",
+    "rimraf": "^6.0.1",
     "sinon": "^19.0.2",
     "tslib": "^2.8.0",
     "typescript": "^5.6.3",
@@ -36,7 +37,7 @@
   "scripts": {
     "check": "npm run lint:fix && npm run test && npm run compile && npm run clean",
     "check-types": "tsc --noEmit",
-    "clean": "rm -rf out && rm -rf out",
+    "clean": "rimraf coverage out",
     "compile": "node esbuild.js",
     "compile-tests": "tsc -p . --outDir out",
     "lint": "eslint src",
