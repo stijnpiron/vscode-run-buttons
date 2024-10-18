@@ -43,7 +43,7 @@
     "lint:fix": "eslint src --fix --cache --debug",
     "package": "node esbuild.js --production",
     "pretest": "npm run compile-tests",
-    "test": "node ./out/test/runTest.js",
+    "test": "vscode-test",
     "vscode:prepublish": "npm run package",
     "watch-tests": "tsc -p . -w --outDir out"
   },
