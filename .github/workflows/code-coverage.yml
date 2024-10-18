@@ -34,7 +34,7 @@ jobs:
         uses: coactions/setup-xvfb@v1
         with:
           run: |
-            npm test:coverage
+            npm run test:coverage
 
       - name: Code Coverage Summary Report
         uses: irongut/CodeCoverageSummary@v1.3.0
