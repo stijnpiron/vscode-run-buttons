@@ -3,12 +3,9 @@
   "include": ["out/**"],
   "exclude": ["**/node_modules/**", "out/test/", "out/types/"],
   "reporter": ["cobertura", "html"],
-  "thresholds": {
-    "global": {
-      "lines": 80,
-      "statements": 80,
-      "functions": 80,
-      "branches": 80
-    }
-  }
+  "branches": 80,
+  "functions": 80,
+  "lines": 80,
+  "statements": 80,
+  "check-coverage": true
 }
