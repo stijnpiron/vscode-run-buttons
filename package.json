@@ -45,7 +45,7 @@
     "lint:fix": "eslint src --fix --cache --debug",
     "package": "node esbuild.js --production",
     "pretest": "npm run compile-tests",
-    "test": "nyc --reporter=lcov vscode-test --coverage",
+    "test": "nyc --reporter=cobertura vscode-test --coverage",
     "vscode:prepublish": "npm run package",
     "watch-tests": "tsc -p . -w --outDir out"
   },
