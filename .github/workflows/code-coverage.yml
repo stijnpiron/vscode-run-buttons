@@ -28,6 +28,9 @@ jobs:
       - name: Run test coverage
         run: npm test
 
+      - name: List coverage directory
+        run: ls -R coverage
+
       - name: Code Coverage Summary Report
         uses: irongut/CodeCoverageSummary@v1.3.0
         with:
