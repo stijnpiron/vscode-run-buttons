@@ -21,20 +21,48 @@ jobs:
           sudo apt-get install -y xvfb
           Xvfb :99 -ac &
           export DISPLAY=:99
+
       - name: Install dependencies
         run: npm ci
+
+      - name: Upload node_modules
+        uses: actions/upload-artifact@v3
+        with:
+          name: node_modules
+          path: node_modules
 
   run_tests:
     runs-on: ubuntu-latest
     needs: setup
     steps:
+      - name: Checkout codebase
+        uses: actions/checkout@v4.2.1
+        with:
+          ref: ${{ github.base_ref }}
+
+      - name: Download node_modules
+        uses: actions/download-artifact@v3
+        with:
+          name: node_modules
+
       - name: Run test coverage
         run: npm test
+
+      - name: Upload Coverage Results
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage
+          path: coverage/
 
   upload_coverage:
     runs-on: ubuntu-latest
     needs: run_tests
     steps:
+      - name: Download Coverage Results
+        uses: actions/download-artifact@v3
+        with:
+          name: coverage
+
       - name: Upload Coverage
         uses: irongut/CodeCoverageSummary@v1.3.0
         with:
