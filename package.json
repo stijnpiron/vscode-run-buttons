@@ -7,6 +7,7 @@
   ],
   "description": "VS Code extension to run npm scripts with a button",
   "devDependencies": {
+    "@istanbuljs/nyc-config-typescript": "^1.0.2",
     "@types/mocha": "^10.0.9",
     "@types/node": "22.x",
     "@types/sinon": "^17.0.3",
@@ -15,6 +16,7 @@
     "@typescript-eslint/parser": "^8.10.0",
     "@vscode/test-cli": "^0.0.10",
     "@vscode/test-electron": "^2.4.1",
+    "c8": "^10.1.2",
     "esbuild": "^0.24.0",
     "eslint": "^9.12.0",
     "eslint-plugin-unused-imports": "^4.1.4",
@@ -31,9 +33,61 @@
     "vscode": "^1.94.2"
   },
   "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "npm.start",
+        "title": "npm start",
+        "icon": "images/play-sharp.svg"
+      },
+      {
+        "command": "npm.build",
+        "title": "npm run build",
+        "icon": "images/build-sharp.svg"
+      },
+      {
+        "command": "npm.publish",
+        "title": "npm run publish",
+        "icon": "images/cloud-upload-sharp.svg"
+      },
+      {
+        "command": "npm.android",
+        "title": "npm run build:android",
+        "icon": "images/logo-android.svg"
+      },
+      {
+        "command": "split",
+        "title": "|"
+      }
+    ],
+    "menus": {
+      "editor/title": [
+        {
+          "command": "npm.start",
+          "when": "true",
+          "group": "navigation@1"
+        },
+        {
+          "command": "npm.build",
+          "when": "true",
+          "group": "navigation@2"
+        },
+        {
+          "command": "npm.publish",
+          "when": "true",
+          "group": "navigation@3"
+        },
+        {
+          "command": "npm.android",
+          "when": "true",
+          "group": "navigation@4"
+        }
+      ]
+    }
+  },
   "name": "vscode-run-buttons",
   "scripts": {
-    "check": "npm run lint:fix && npm run test && npm run compile && npm run clean",
+    "check": "npm run lint:fix && npm run check-types && npm run test && npm run compile && npm run clean",
     "check-types": "tsc --noEmit",
     "clean": "rimraf coverage out",
     "compile": "node esbuild.js",
@@ -42,9 +96,11 @@
     "lint:fix": "eslint src --fix --cache --debug",
     "package": "node esbuild.js --production",
     "pretest": "npm run compile-tests",
-    "test": "vscode-test --coverage",
+    "test": "node ./out/test/runTest.js",
+    "test:coverage": "c8 --check-coverage npm test",
     "vscode:prepublish": "npm run package",
     "watch-tests": "tsc -p . -w --outDir out"
   },
+  "type": "commonjs",
   "version": "0.0.1"
 }
