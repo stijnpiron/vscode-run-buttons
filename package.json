@@ -95,7 +95,7 @@
     "clean": "rimraf .nyc_output coverage out report",
     "compile": "node esbuild.js",
     "compile-tests": "tsc -p . --outDir out",
-    "coverage": "c8 --check-coverage npm run test",
+    "coverage": "c8 --check-coverage npm test",
     "lint": "eslint src",
     "lint:fix": "eslint src --fix --cache --debug",
     "package": "node esbuild.js --production",

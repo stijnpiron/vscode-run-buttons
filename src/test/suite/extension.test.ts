@@ -38,6 +38,7 @@ suite("Extension Tests", () => {
     assert(registerCommandStub.calledWith("npm.build"));
     showTerminalStub.restore();
   });
+  
   test("should execute npm start command", async () => {
     const terminalMock = {
       show: sandbox.stub(),
