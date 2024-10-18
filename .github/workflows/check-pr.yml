@@ -31,17 +31,13 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - name: Set up Xvfb
-        run: |
-          sudo apt-get install -y xvfb
-          export DISPLAY=:99
-          sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &
-
       - name: Install dependencies
         run: npm ci
 
       - name: Run tests
-        run: npm test
+        uses: coactions/setup-xvfb@v1
+        with:
+          run: npm test
   lint:
     runs-on: ubuntu-latest
 
