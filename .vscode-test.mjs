@@ -4,14 +4,14 @@ export default defineConfig([
   {
     label: "unitTests",
     files: "out/test/**/*.test.js",
-    workspaceFolder: "./sampleWorkspace",
+    version: "insiders",
+    workspaceFolder: "./test-workspace",
     mocha: {
       ui: "tdd",
       timeout: 20000,
     },
-    env:{
-      "DISPLAY": ":99"
+    env: {
+      DISPLAY: ":99",
     },
-    
   },
 ]);
