@@ -1,6 +1,6 @@
 {
   "all": true,
   "include": ["out/**"],
-  "exclude": ["**/node_modules/**", "out/test/"],
-  "reporter": ["cobertura"]
+  "exclude": ["**/node_modules/**", "out/test/", "out/types/"],
+  "reporter": ["cobertura", "html"]
 }

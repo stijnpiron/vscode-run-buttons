@@ -7,7 +7,7 @@ on:
     branches: ["main"]
 
 jobs:
-  build:
+  get_coverage:
     runs-on: ubuntu-latest
 
     steps:
