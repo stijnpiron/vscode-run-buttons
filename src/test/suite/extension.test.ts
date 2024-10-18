@@ -1,7 +1,7 @@
 import assert from "assert";
 import sinon from "sinon";
 import { commands, ExtensionContext, window, workspace } from "vscode";
-import { activate } from "../extension";
+import { activate } from "../../extension";
 
 suite("Extension Tests", () => {
   let sandbox: sinon.SinonSandbox;
