@@ -1,19 +1,49 @@
-import * as assert from "assert";
+import assert from "assert";
+import * as sinon from "sinon";
+import { commands, ExtensionContext, window } from "vscode";
+import { activate } from "../extension";
 
-// You can import and use all API from the 'vscode' module
-// as well as import your extension to test it
-import * as vscode from "vscode";
-// import * as myExtension from '../../extension';
+suite("Extension Tests", () => {
+  let sandbox: sinon.SinonSandbox;
+  let context: ExtensionContext;
 
-suite("Extension Test Suite", () => {
-  vscode.window.showInformationMessage("Start all tests.");
-
-  suiteTeardown(() => {
-    vscode.window.showInformationMessage("All tests done!");
+  setup(() => {
+    sandbox = sinon.createSandbox();
+    context = {
+      subscriptions: [],
+    } as unknown as ExtensionContext;
   });
 
-  test("Sample test", () => {
-    assert.strictEqual(-1, [1, 2, 3].indexOf(5));
-    assert.strictEqual(-1, [1, 2, 3].indexOf(0));
+  teardown(() => {
+    sandbox.restore();
+  });
+
+  test("should register commands on activation", async () => {
+    console.log("Starting test: should register commands on activation");
+
+    const registerCommandStub = sandbox.stub(commands, "registerCommand");
+    const showTerminalStub = sandbox.stub(window, "createTerminal").returns({
+      show: sandbox.stub(),
+      sendText: sandbox.stub(),
+      name: "mockTerminal",
+      processId: Promise.resolve(1234),
+      creationOptions: {},
+      exitStatus: undefined,
+      dispose: sandbox.stub(),
+      hide: sandbox.stub(),
+      state: { isInteractedWith: false },
+      shellIntegration: undefined,
+    });
+
+    await activate(context);
+
+    assert.strictEqual(registerCommandStub.callCount, 4);
+    assert(registerCommandStub.calledWith("npm.start"));
+    assert(registerCommandStub.calledWith("npm.test"));
+    assert(registerCommandStub.calledWith("npm.lint"));
+    assert(registerCommandStub.calledWith("npm.build"));
+
+    showTerminalStub.restore();
+    console.log("Completed test: should register commands on activation");
   });
 });
