@@ -10,6 +10,7 @@ export function activate(context: ExtensionContext) {
   function getWorkspaceFolderPath() {
     const workspaceFolder = workspace.workspaceFolders?.[0];
     const path = workspaceFolder?.uri.fsPath;
+    console.log('getWorkspaceFolderPath',workspaceFolder,path);
     return path;
   }
 
@@ -20,6 +21,7 @@ export function activate(context: ExtensionContext) {
   }
 
   async function getPackageJson() {
+    console.log('cwd:',cwd);
     const packageJson = await getJsonFile<PackageJson>(`${cwd}/package.json`);
     return packageJson;
   }
