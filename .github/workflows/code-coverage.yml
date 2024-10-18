@@ -6,11 +6,13 @@ jobs:
   base_branch_cov:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout codebase
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.base_ref }}
+          
       - name: Use Node.js v20.x
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: v20.x
 
@@ -26,13 +28,18 @@ jobs:
       - name: Run test coverage
         run: npm test
 
-      #  Compares two code coverage files and generates report as a comment
-      - name: Generate Code Coverage report
-        id: code-coverage
-        uses: barecheck/code-coverage-action@v1
+      - name: Upload Coverage
+        uses: irongut/CodeCoverageSummary@v1
         with:
-          barecheck-github-app-token: ${{ secrets.BARECHECK_GITHUB_APP_TOKEN }}
-          lcov-file: "./coverage/lcov.info"
-          minimum-ratio: 0 # Fails Github action once code coverage is decreasing
-          send-summary-comment: true
-          show-annotations: "warning" # Possible options warning|error
+          filename: 'coverage/cobertura-coverage.xml'
+          badge: true
+          format: 'markdown'
+          output: 'both'
+      - name: Add Coverage PR Comment
+        uses: marocchino/sticky-pull-request-comment@v2
+        if: github.event_name == 'pull_request'
+        with:
+          recreate: true
+          path: code-coverage-results.md
+      - name: Write to Job Summary
+        run: cat code-coverage-results.md >> $GITHUB_STEP_SUMMARY
