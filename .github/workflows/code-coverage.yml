@@ -15,7 +15,7 @@ jobs:
           node-version: v20.x
 
       - name: Install dependencies
-        run: npm
+        run: npm ci
 
       - name: Run test coverage
         run: npm test
@@ -42,7 +42,7 @@ jobs:
           name: ref-lcov.info
 
       - name: Install dependencies
-        run: npm
+        run: npm ci
 
       - name: Run test coverage
         run: npm test
