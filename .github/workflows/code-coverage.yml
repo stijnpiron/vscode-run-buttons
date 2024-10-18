@@ -14,6 +14,12 @@ jobs:
         with:
           node-version: v20.x
 
+      - name: Set up Xvfb
+        run: |
+          sudo apt-get install -y xvfb
+          Xvfb :99 -ac &
+          export DISPLAY=:99
+
       - name: Install dependencies
         run: npm ci
 
@@ -40,6 +46,12 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: ref-lcov.info
+
+      - name: Set up Xvfb
+        run: |
+          sudo apt-get install -y xvfb
+          Xvfb :99 -ac &
+          export DISPLAY=:99
 
       - name: Install dependencies
         run: npm ci
