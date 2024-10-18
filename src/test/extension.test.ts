@@ -1,7 +1,7 @@
 import assert from "assert";
 import sinon from "sinon";
 import { commands, ExtensionContext, window, workspace } from "vscode";
-import { activate, deactivate } from "../extension";
+import { activate } from "../extension";
 
 suite("Extension Tests", () => {
   let sandbox: sinon.SinonSandbox;
@@ -146,12 +146,12 @@ suite("Extension Tests", () => {
     executeInTerminalStub.restore();
   });
 
-   test("should get workspace folder path", async () => {
-     const workspaceFolder = { uri: { fsPath: "/path/to/workspace" } };
-     sandbox.stub(workspace, "workspaceFolders").value([workspaceFolder]);
+  test("should get workspace folder path", async () => {
+    const workspaceFolder = { uri: { fsPath: "/path/to/workspace" } };
+    sandbox.stub(workspace, "workspaceFolders").value([workspaceFolder]);
 
-     await activate(context);
+    await activate(context);
 
-     assert.strictEqual(workspaceFolder.uri.fsPath, "/path/to/workspace");
-   });
+    assert.strictEqual(workspaceFolder.uri.fsPath, "/path/to/workspace");
+  });
 });
