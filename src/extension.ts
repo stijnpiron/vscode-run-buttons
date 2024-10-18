@@ -1,26 +1,78 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
-import * as vscode from 'vscode';
+import { promises as fsPromises } from "fs";
+import { commands, ExtensionContext, window, workspace } from "vscode";
+import { KeyValuePair, PackageJson } from "./types";
 
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
-export function activate(context: vscode.ExtensionContext) {
+const { readFile } = fsPromises;
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "vscode-run-buttons" is now active!');
+export function activate(context: ExtensionContext) {
+  const cwd = getWorkspaceFolderPath();
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	const disposable = vscode.commands.registerCommand('vscode-run-buttons.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from VS Code Run Buttons!');
-	});
+  function getWorkspaceFolderPath() {
+    const workspaceFolder = workspace.workspaceFolders?.[0];
+    const path = workspaceFolder?.uri.fsPath;
+    return path;
+  }
 
-	context.subscriptions.push(disposable);
+  async function getJsonFile<T>(path: string) {
+    const fileBuffer = await readFile(path);
+    const data = JSON.parse(fileBuffer.toString()) as T;
+    return data;
+  }
+
+  async function getPackageJson() {
+    const packageJson = await getJsonFile<PackageJson>(`${cwd}/package.json`);
+    return packageJson;
+  }
+
+  /**
+   * Execute commands through the VS Code terminal
+   * @param {string} command The command to execute
+   */
+  function executeInTerminal(command: string) {
+    // If there is already an open terminal, use it; otherwise, create a new terminal
+    const terminal = window.createTerminal(command);
+    // Show terminal
+    terminal.show();
+    // Send command to the terminal
+    terminal.sendText(command);
+  }
+
+  async function init() {
+    let scripts: KeyValuePair = {};
+    // Register command and send npm start
+    const npmStart = commands.registerCommand("npm.start", function () {
+      executeInTerminal("npm start");
+    });
+
+    // Register command and send npm run test
+    const npmTest = commands.registerCommand("npm.test", function () {
+      executeInTerminal("npm run test");
+    });
+
+    // Register command and send npm run lint
+    const npmLint = commands.registerCommand("npm.lint", function () {
+      executeInTerminal("npm run lint");
+    });
+
+    // Register command and send npm run build
+    const npmBuild = commands.registerCommand("npm.build", function () {
+      executeInTerminal("npm run build");
+    });
+
+    // Add the command to context.subscriptions
+    context.subscriptions.push(npmStart, npmBuild, npmLint, npmTest);
+
+    try {
+      const packageJson = await getPackageJson();
+      console.log("Loaded package.json!");
+      scripts = { ...scripts, ...packageJson.scripts };
+      console.log("all scripts", { scripts });
+    } catch {
+      console.log("No package.json found!");
+    }
+  }
+
+  init();
 }
 
-// This method is called when your extension is deactivated
 export function deactivate() {}

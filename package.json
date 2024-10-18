@@ -1,54 +1,51 @@
 {
-  "name": "vscode-run-buttons",
-  "displayName": "VS Code Run Buttons",
-  "description": "VS Code extension to run npm scripts with a button",
-  "version": "0.0.1",
-  "engines": {
-    "vscode": "^1.94.2"
-  },
+  "activationEvents": [
+    "onStartupFinished"
+  ],
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
-  "main": "./dist/extension.js",
-  "contributes": {
-    "commands": [
-      {
-        "command": "vscode-run-buttons.helloWorld",
-        "title": "VS Code Run Buttons"
-      }
-    ]
-  },
-  "scripts": {
-    "vscode:prepublish": "npm run package",
-    "compile": "npm run check-types && npm run lint && node esbuild.js",
-    "watch": "npm-run-all -p watch:*",
-    "watch:esbuild": "node esbuild.js --watch",
-    "watch:tsc": "tsc --noEmit --watch --project tsconfig.json",
-    "package": "npm run check-types && npm run lint && node esbuild.js --production",
-    "compile-tests": "tsc -p . --outDir out",
-    "watch-tests": "tsc -p . -w --outDir out",
-    "pretest": "npm run compile-tests && npm run compile && npm run lint",
-    "check-types": "tsc --noEmit",
-    "lint": "eslint src",
-    "lint:fix": "eslint src --fix --cache --debug",
-    "test": "vscode-test",
-    "clean": "rm -rf dist && rm -rf out",
-    "check": "npm run lint:fix && npm run test && npm run compile && npm run clean"
-  },
+  "description": "VS Code extension to run npm scripts with a button",
   "devDependencies": {
     "@types/mocha": "^10.0.9",
     "@types/node": "22.x",
+    "@types/sinon": "^17.0.3",
     "@types/vscode": "^1.94.0",
-    "@typescript-eslint/eslint-plugin": "^8.9.0",
-    "@typescript-eslint/parser": "^8.9.0",
+    "@typescript-eslint/eslint-plugin": "^8.10.0",
+    "@typescript-eslint/parser": "^8.10.0",
     "@vscode/test-cli": "^0.0.10",
     "@vscode/test-electron": "^2.4.1",
     "esbuild": "^0.24.0",
     "eslint": "^9.12.0",
     "eslint-plugin-unused-imports": "^4.1.4",
     "globals": "^15.11.0",
+    "lru-cache": "^11.0.1",
+    "mocha": "^10.7.3",
     "npm-run-all": "^4.1.5",
-    "typescript": "^5.6.3"
-  }
+    "sinon": "^19.0.2",
+    "tslib": "^2.8.0",
+    "typescript": "^5.6.3",
+    "vscode-test": "^1.6.1"
+  },
+  "displayName": "VS Code Run Buttons",
+  "engines": {
+    "vscode": "^1.94.2"
+  },
+  "main": "./out/extension.js",
+  "name": "vscode-run-buttons",
+  "scripts": {
+    "check": "npm run lint:fix && npm run test && npm run compile && npm run clean",
+    "check-types": "tsc --noEmit",
+    "clean": "rm -rf out && rm -rf out",
+    "compile": "node esbuild.js",
+    "compile-tests": "tsc -p . --outDir out",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix --cache --debug",
+    "package": "node esbuild.js --production",
+    "pretest": "npm run compile-tests",
+    "test": "node ./out/test/runTest.js",
+    "vscode:prepublish": "npm run package",
+    "watch-tests": "tsc -p . -w --outDir out"
+  },
+  "version": "0.0.1"
 }
