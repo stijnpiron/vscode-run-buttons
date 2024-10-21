@@ -44,6 +44,9 @@ jobs:
           format: "markdown"
           output: "both"
 
+      - name: show folder contents
+        run: ls -la
+
       - name: Add Coverage PR Comment
         uses: marocchino/sticky-pull-request-comment@v2
         if: github.event_name == 'pull_request'
